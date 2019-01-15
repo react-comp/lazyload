@@ -1,3 +1,4 @@
+/// <reference path="../global.d.ts" /> 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as PropTypes from 'prop-types';
@@ -37,12 +38,37 @@ export default class lazyload extends React.PureComponent<LazyloadProps> {
   }
 
   componentDidMount() {
+    if (window.IntersectionObserver) {
+      this.intersectionObserver();
+    } else {
+      window.addEventListener('scroll', this.scrollFn)
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.scrollFn);
+  }
+
+  scrollFn = () => {
+    if (window.pageYOffset + window.innerHeight >= this.boxRef.offsetTop) {
+      this.setState({ isLazy: false });
+
+      window.removeEventListener('scroll', this.scrollFn);
+    }
+  }
+  
+  /**
+   * Incompatible IntersectionObserver
+   *
+   */
+  private intersectionObserver = () => {
     interface IntersectionEntry {
       [index: number]: any;
     }
 
     const io: any = new IntersectionObserver((change: IntersectionEntry) => {
-      if (change[0].isIntersecting) {
+      console.log(change[0])
+      if (change[0].isIntersecting) {  
         this.setState({ isLazy: false });
 
         io.disconnect();
@@ -52,6 +78,10 @@ export default class lazyload extends React.PureComponent<LazyloadProps> {
     io.observe(this.boxRef);
   }
 
+  /**
+   * Parsing class name
+   *
+   */
   private parseClassNames = () => {
     const { className } = this.props;
     const classNames = [].concat(className);

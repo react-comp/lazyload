@@ -40,3 +40,9 @@ import "@react-comp/lazyload/dist/lazyload.css";
   style?: object,                 // style
 />
 ```
+
+# todo
+
+- [] Support left and right sliding
+
+- [] Support specified trigger distance
