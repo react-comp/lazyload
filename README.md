@@ -45,4 +45,4 @@ import "@react-comp/lazyload/dist/lazyload.css";
 
 - [ ] Support left and right sliding
 
-- [] Support specified trigger distance
+- [ ] Support specified trigger distance
